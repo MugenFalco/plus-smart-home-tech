@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: collector
+
+logging:
+  level:
+    ru.yandex.practicum.telemetry.collector: DEBUG
