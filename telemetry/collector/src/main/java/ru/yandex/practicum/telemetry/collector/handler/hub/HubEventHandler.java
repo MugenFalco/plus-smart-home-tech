@@ -1,12 +1,11 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 
 public interface HubEventHandler {
 
-    HubEventType getMessageType();
+    HubEventProto.PayloadCase getMessageType();
 
-    SpecificRecordBase mapToAvroPayload(HubEvent event);
+    SpecificRecordBase mapToAvroPayload(HubEventProto event);
 }

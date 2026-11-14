@@ -1,7 +1,7 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Set;
 @Component
 public class HubEventHandlerRegistry {
 
-    private final Map<HubEventType, HubEventHandler> handlers;
+    private final Map<HubEventProto.PayloadCase, HubEventHandler> handlers;
 
     public HubEventHandlerRegistry(Set<HubEventHandler> handlerSet) {
         this.handlers = new HashMap<>();
@@ -19,7 +19,7 @@ public class HubEventHandlerRegistry {
         }
     }
 
-    public HubEventHandler get(HubEventType type) {
+    public HubEventHandler get(HubEventProto.PayloadCase type) {
         HubEventHandler handler = handlers.get(type);
         if (handler == null) {
             throw new IllegalArgumentException("Не найден хендлер для типа события хаба: " + type);

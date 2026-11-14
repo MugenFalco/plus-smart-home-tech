@@ -2,28 +2,28 @@ package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.TemperatureSensorProto;
 import ru.yandex.practicum.kafka.telemetry.event.TemperatureSensorAvro;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
-import ru.yandex.practicum.telemetry.collector.model.sensor.TemperatureSensorEvent;
+import ru.yandex.practicum.telemetry.collector.mapper.TimestampMapper;
 
 @Component
 public class TemperatureSensorEventHandler implements SensorEventHandler {
 
     @Override
-    public SensorEventType getMessageType() {
-        return SensorEventType.TEMPERATURE_SENSOR_EVENT;
+    public SensorEventProto.PayloadCase getMessageType() {
+        return SensorEventProto.PayloadCase.TEMPERATURE_SENSOR;
     }
 
     @Override
-    public SpecificRecordBase mapToAvroPayload(SensorEvent event) {
-        TemperatureSensorEvent temperatureEvent = (TemperatureSensorEvent) event;
+    public SpecificRecordBase mapToAvroPayload(SensorEventProto event) {
+        TemperatureSensorProto temperatureSensor = event.getTemperatureSensor();
         return TemperatureSensorAvro.newBuilder()
-                .setId(temperatureEvent.getId())
-                .setHubId(temperatureEvent.getHubId())
-                .setTimestamp(temperatureEvent.getTimestamp())
-                .setTemperatureC(temperatureEvent.getTemperatureC())
-                .setTemperatureF(temperatureEvent.getTemperatureF())
+                .setId(event.getId())
+                .setHubId(event.getHubId())
+                .setTimestamp(TimestampMapper.toInstant(event.getTimestamp()))
+                .setTemperatureC(temperatureSensor.getTemperatureC())
+                .setTemperatureF(temperatureSensor.getTemperatureF())
                 .build();
     }
 }
