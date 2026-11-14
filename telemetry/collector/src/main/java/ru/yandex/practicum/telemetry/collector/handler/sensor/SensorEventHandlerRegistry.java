@@ -1,7 +1,7 @@
 package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Set;
 @Component
 public class SensorEventHandlerRegistry {
 
-    private final Map<SensorEventType, SensorEventHandler> handlers;
+    private final Map<SensorEventProto.PayloadCase, SensorEventHandler> handlers;
 
     public SensorEventHandlerRegistry(Set<SensorEventHandler> handlerSet) {
         this.handlers = new HashMap<>();
@@ -19,7 +19,7 @@ public class SensorEventHandlerRegistry {
         }
     }
 
-    public SensorEventHandler get(SensorEventType type) {
+    public SensorEventHandler get(SensorEventProto.PayloadCase type) {
         SensorEventHandler handler = handlers.get(type);
         if (handler == null) {
             throw new IllegalArgumentException("Не найден хендлер для типа события датчика: " + type);
