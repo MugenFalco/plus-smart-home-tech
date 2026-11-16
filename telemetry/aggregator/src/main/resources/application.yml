@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: aggregator
+
+aggregator:
+  kafka:
+    topics:
+      sensors: telemetry.sensors.v1
+      snapshots: telemetry.snapshots.v1
+    poll-timeout: 1s
+    consumer:
+      "[bootstrap.servers]": localhost:9092
+      "[group.id]": telemetry.aggregator.sensors
+      "[client.id]": aggregator-sensor-consumer
+      "[key.deserializer]": org.apache.kafka.common.serialization.StringDeserializer
+      "[value.deserializer]": ru.yandex.practicum.kafka.deserializer.SensorEventDeserializer
+      "[enable.auto.commit]": false
+      "[auto.offset.reset]": earliest
+    producer:
+      "[bootstrap.servers]": localhost:9092
+      "[client.id]": aggregator-snapshot-producer
+      "[key.serializer]": org.apache.kafka.common.serialization.StringSerializer
+      "[value.serializer]": ru.yandex.practicum.kafka.serializer.GeneralAvroSerializer
+
+logging:
+  register-shutdown-hook: false
+  level:
+    ru.yandex.practicum.telemetry.aggregator: DEBUG
